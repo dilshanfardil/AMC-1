@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<f:view contentType="text/html">
+	<f:metadata>
+		<f:event type="preRenderView" listener="#{userBean.loadUsersList()}" />
+	</f:metadata>
+
+	<h:head>
+	</h:head>
+	<h:body>
+		<h:form>
+			<p:menubar>
+				<p:menuitem id="logout" value="Logout" icon="ui-icon-home"
+					ajax="false" action="#{loginBean.logout}" />
+			</p:menubar>
+		</h:form>
+		<h:form>
+			<p:layout style="min-width:1200px;min-height:600px;">
+				<p:layoutUnit position="west" resizable="true" size="200">
+					<h:form>
+						<p:panelMenu>
+							<p:submenu label="Manager">
+								<p:menuitem value="Registrations" url="/manager-register.xhtml" />
+								<p:menuitem value="User Management" url="/manager-view.xhtml" />
+								<p:menuitem value="Reports Section" url="#" />
+
+							</p:submenu>
+						</p:panelMenu>
+					</h:form>
+				</p:layoutUnit>
+				<p:layoutUnit position="center">
+					<h1>View All Users</h1>
+
+					<p:dataTable var="user" value="#{userBean.allUsers}">
+
+						<p:column headerText="User ID">
+							<h:outputText value="#{user.id}" />
+						</p:column>
+
+						<p:column headerText="User Name">
+							<h:outputText value="#{user.userName}" />
+						</p:column>
+
+						<p:column headerText="Role">
+							<h:outputText value="#{user.role}" />
+						</p:column>
+
+
+
+						<p:column headerText="Actions">
+							<p:commandButton value="update" id="updateBtn"
+								action="#{userBean.loadUser(user.id)}"
+								style="margin-right:20px;" styleClass="ui-priority-primary" />
+
+							<p:commandButton value="delete" id="deleteBtn"
+								action="#{userBean.deleteUser(user.id)}"
+								style="margin-right:20px;" styleClass="ui-priority-primary" />
+						</p:column>
+
+						<!-- p:column headerText="NIC">
+							<h:outputText value="#{stud.nic}" />
+						</p:column>
+						<p:column headerText="Phone #">
+							<h:outputText value="#{stud.phoneNo}" />
+						</p:column-->
+					</p:dataTable>
+				</p:layoutUnit>
+			</p:layout>
+		</h:form>
+	</h:body>
+</f:view>
+</html>

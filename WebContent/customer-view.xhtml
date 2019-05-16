@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<f:view contentType="text/html">
+
+	<f:metadata>
+		<f:event type="preRenderView"
+			listener="#{appointmentBean.loadAppointmentsByCustomerId(currentUserId)}" />
+	</f:metadata>
+	<h:head>
+	</h:head>
+	<h:body>
+		<h:form>
+			<p:menubar>
+				<p:menuitem id="logout" value="Logout" icon="ui-icon-home"
+					ajax="false" action="#{loginBean.logout}" />
+			</p:menubar>
+		</h:form>
+		<h:form>
+			<p:layout style="min-width:1200px;min-height:600px;">
+				<p:layoutUnit position="west" resizable="true" size="200">
+					<h:form>
+						<p:panelMenu>
+							<p:submenu label="Customer">
+								<p:menuitem value="Appointments" url="/customer-view.xhtml" />
+							</p:submenu>
+						</p:panelMenu>
+
+					</h:form>
+				</p:layoutUnit>
+				<p:layoutUnit position="center">
+					<h1>View My Appointments</h1>
+
+					<p:dataTable var="appointment" id="appointment"
+						value="#{appointmentBean.pendingAppointments}">
+
+						<p:column headerText="Appointment ID">
+							<h:outputText value="#{appointment.appointmentId}" />
+						</p:column>
+
+						<p:column headerText="Doctor ID">
+							<h:outputText value="#{appointment.doctorName}" />
+						</p:column>
+
+						<p:column headerText="Customer ID">
+							<h:outputText value="#{appointment.customerName}" />
+						</p:column>
+
+						<p:column headerText="Appointment Date">
+							<h:outputText value="#{appointment.date}" />
+						</p:column>
+
+						<p:column headerText="Duration Left">
+							<h:outputText value="#{appointment.durationLeft}" />
+						</p:column>
+
+						<p:column headerText="Charge">
+							<h:outputText value="#{appointment.charge}" />
+						</p:column>
+
+
+						<!-- p:column headerText="NIC">
+							<h:outputText value="#{stud.nic}" />
+						</p:column>
+						<p:column headerText="Phone #">
+							<h:outputText value="#{stud.phoneNo}" />
+						</p:column-->
+					</p:dataTable>
+				</p:layoutUnit>
+			</p:layout>
+		</h:form>
+	</h:body>
+</f:view>
+</html>

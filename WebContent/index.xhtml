@@ -1,0 +1,38 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<f:view contentType="text/html">
+	<h:head>
+	</h:head>
+	<h:body>
+		<h:form>
+			<p:layoutUnit position="center">
+
+				<p:messages id="msg" showDetail="true" autoUpdate="false"
+					closable="true" />
+
+				<p:growl id="growl" sticky="true" showDetail="true" life="3000" />
+
+
+				<h:panelGrid columns="2" cellpadding="5" id="userPanel">
+					<h:outputLabel for="username" value="Username:" />
+					<p:inputText id="username" value="#{user.userName}"
+						required="true" label="username" />
+
+					<h:outputLabel for="password" value="Password:" />
+					<p:password id="password" value="#{user.password}"
+						required="true" label="password" />
+
+					<f:facet name="footer">
+						<p:commandButton value="Login" update="growl"
+							action="#{loginBean.login(user)}" />
+					</f:facet>
+
+				</h:panelGrid>
+			</p:layoutUnit>
+		</h:form>
+	</h:body>
+</f:view>
+</html>

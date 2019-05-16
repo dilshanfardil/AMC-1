@@ -1,0 +1,72 @@
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<f:view contentType="text/html">
+	<h:head>
+	</h:head>
+	<h:body>
+		<h:form>
+			<p:menubar>
+				<p:menuitem id="logout" value="Logout" icon="ui-icon-home"
+					ajax="false" action="#{loginBean.logout}" />
+			</p:menubar>
+		</h:form>
+		<h:form>
+			<p:layout style="min-width:1200px;min-height:600px;">
+				<p:layoutUnit position="west" resizable="true" size="200">
+					<h:form>
+						<p:panelMenu>
+							<p:submenu label="Manager">
+								<p:menuitem value="Registrations" url="/manager-register.xhtml" />
+								<p:menuitem value="User Management" url="/manager-view.xhtml" />
+								<p:menuitem value="Reports Section" url="#" />
+							</p:submenu>
+						</p:panelMenu>
+					</h:form>
+				</p:layoutUnit>
+				<p:layoutUnit position="center">
+					<p:messages id="msg" showDetail="true" autoUpdate="false"
+						closable="true" />
+					<p:panelGrid columns="2" id="managerPanel">
+						<f:facet name="header">
+						Registrations
+						</f:facet>
+
+						<h:outputLabel value="User Name: " />
+						<p:inputText id="userName" value="#{user.userName}" />
+						<h:outputLabel value="Password: " />
+						<p:password id="password" value="#{user.password}" />
+						<p:outputLabel value="Basic:" />
+						<p:selectOneMenu id="role" value="#{user.role}"
+							style="width:125px">
+							<f:selectItem itemLabel="Select One" itemValue="" />
+							<f:selectItem itemLabel="Manager" itemValue="Manager" />
+							<f:selectItem itemLabel="Counter Staff" itemValue="Counter Staff" />
+							<f:selectItem itemLabel="Doctor" itemValue="Doctor" />
+						</p:selectOneMenu>
+						<!-- h:outputLabel value="Date of Birth: " />
+						<p:calendar navigator="none" value="#{studentBean.student.dob}" />
+						<h:outputLabel value="NIC: " />
+						<p:inputText id="nic" value="#{studentBean.student.nic}" />
+						<h:outputLabel value="Email: " />
+						<p:inputText id="email" value="#{studentBean.student.email}" />
+						<h:outputLabel value="Phone No: " />
+						<p:inputText id="phone" value="#{studentBean.student.phoneNo}" />
+						<h:outputLabel value="Address: " />
+						<p:inputTextarea id="address" rows="4" cols="40"
+							value="#{studentBean.student.address}" /-->
+						<f:facet name="footer">
+							<p:commandButton value="Submit" icon="ui-icon-check"
+								actionListener="#{userBean.addUser(user)}" />
+						</f:facet>
+					</p:panelGrid>
+				</p:layoutUnit>
+			</p:layout>
+		</h:form>
+	</h:body>
+</f:view>
+</html>
