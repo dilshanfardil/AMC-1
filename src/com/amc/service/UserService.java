@@ -12,93 +12,6 @@ import com.amc.util.DbUtil;
 
 public class UserService {
 
-	public User validateUser(User user) {
-		Connection connection = null;
-		PreparedStatement pstmt = null;
-		
-		ResultSet rs = null;
-		try {
-			connection = DbUtil.getConnection();
-			String sql = "SELECT reg_no,role FROM users WHERE user_name = ? AND password = ?";
-
-			pstmt = connection.prepareStatement(sql,ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
-			pstmt.setString(1, user.getUserName());
-			pstmt.setString(2, user.getPassword());
-			
-			rs = pstmt.executeQuery();
-			
-			int counter = 0;
-			
-			while(rs.next()) {
-				counter++;
-			}
-			System.out.println(counter);
-			
-			if (counter==1 ) {
-				rs.previous();
-				user.setId(rs.getInt(1));
-				user.setRole(rs.getString(2));
-			} else {
-				System.out.println("error: could not get the record counts");
-			}
-		} catch (Exception e) {
-			System.out.println("Error: " + e);
-		} finally {
-			try {
-				rs.close();
-				pstmt.close();
-
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-
-		}
-
-		return user;
-	}
-
-	public String getUserRole(User user) {
-
-		String role = null;
-		Connection connection = null;
-
-		PreparedStatement pstmt = null;
-		ResultSet rs = null;
-		try {
-			connection = DbUtil.getConnection();
-			String sql = "SELECT role FROM users WHERE user_name = ? AND password = ?";
-
-			pstmt = connection.prepareStatement(sql);
-			pstmt.setString(1, user.getUserName());
-			pstmt.setString(2, user.getPassword());
-
-			rs = pstmt.executeQuery();
-			if (rs.next()) {
-				role = rs.getString(1);
-				// System.out.println("numberOfRows= " + numberOfRows);
-
-			} else {
-				System.out.println("error: could not get the record counts");
-			}
-		} catch (Exception e) {
-			System.out.println("Error: " + e);
-		} finally {
-			try {
-				rs.close();
-				pstmt.close();
-
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-
-		}
-
-		return role;
-
-	}
-
 	public boolean addUser(User user) {
 		boolean completed = false;
 		Connection connection = null;
@@ -107,42 +20,44 @@ public class UserService {
 
 		try {
 			connection = DbUtil.getConnection();
-			String sql = "INSERT INTO users(user_name, password, role) VALUES (?,?,?)";
+			String sql = "INSERT INTO users VALUES (?,?,?,?,?,?,?,?,?,?)";
 
 			pstmt = connection.prepareStatement(sql);
 
-			pstmt.setString(1, user.getUserName());
-			pstmt.setString(2, user.getPassword());
-			pstmt.setString(3, user.getRole());
-			System.out.println("pstmt fine");
+			pstmt.setString(1, user.getUserId());
+			pstmt.setString(2, user.getUserName());
+			pstmt.setString(3, user.getPassword());
+			pstmt.setString(4, user.getName());
+			pstmt.setString(5, user.getGender());
+			pstmt.setInt(6, user.getPhone());
+			pstmt.setInt(7, user.getNic());
+			pstmt.setString(8, user.getEmail());
+			pstmt.setString(9, user.getAddress());
+			pstmt.setString(10, user.getRole());
+			
 			int affectedRows = pstmt.executeUpdate();
 
 			System.out.println(affectedRows + " row(s) affected !!");
-			System.out.println("Recode Insert successfully...");
+			System.out.println("User add successfully...");
 
 			completed = true;
 		} catch (Exception e) {
 			System.out.println("Error: " + e);
 		} finally {
 			try {
-
 				pstmt.close();
-
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-
 		}
-
 		return completed;
-
 	}
 
 	
 
 	public List<User> getAllUsers() {
-		List<User> staffList = new ArrayList<>();
+		List<User> list = new ArrayList<>();
 		Connection connection = null;
 
 		PreparedStatement pstmt = null;
@@ -152,16 +67,20 @@ public class UserService {
 			String sql = "SELECT * FROM users";
 
 			pstmt = connection.prepareStatement(sql);
-			
-
 			rs = pstmt.executeQuery();
 			while (rs.next()) {
 				User user = new User();
-				user.setId(rs.getInt(1));
+				user.setUserId(rs.getString(1));
 				user.setUserName(rs.getString(2));
 				user.setPassword(rs.getString(3));
-				user.setRole(rs.getString(4));
-				staffList.add(user);
+				user.setName(rs.getString(4));
+				user.setGender(rs.getString(5));
+				user.setPhone(rs.getInt(6));
+				user.setNic(rs.getInt(7));
+				user.setEmail(rs.getString(8));
+				user.setAddress(rs.getString(9));
+				user.setRole(rs.getString(10));
+				list.add(user);
 			}
 		} catch (Exception e) {
 			System.out.println("Error: staff error " + e);
@@ -182,11 +101,11 @@ public class UserService {
 
 		}
 
-		return staffList;
+		return list;
 
 	}
 
-	public User loadUser(int userId) {
+	public User loadUser(String userId) {
 		User user = new User();
 		Connection connection = null;
 
@@ -194,19 +113,24 @@ public class UserService {
 		ResultSet rs = null;
 		try {
 			connection = DbUtil.getConnection();
-			String sql = "SELECT * FROM users WHERE reg_no =?";
+			String sql = "SELECT * FROM users WHERE user_id =?";
 
 			pstmt = connection.prepareStatement(sql);
-			pstmt.setInt(1, userId);
+			pstmt.setString(1, userId);
 
 			rs = pstmt.executeQuery();
-			while (rs.next()) {
-				user.setId(rs.getInt(1));
-				user.setUserName(rs.getString(2));
-				user.setPassword(rs.getString(3));
-				user.setRole(rs.getString(4));
-
-			}
+			rs.next();
+			user.setUserId(rs.getString(1));
+			user.setUserName(rs.getString(2));
+			user.setPassword(rs.getString(3));
+			user.setName(rs.getString(4));
+			user.setGender(rs.getString(5));
+			user.setPhone(rs.getInt(6));
+			user.setNic(rs.getInt(7));
+			user.setEmail(rs.getString(8));
+			user.setAddress(rs.getString(9));
+			user.setRole(rs.getString(10));
+		
 		} catch (Exception e) {
 			System.out.println("Error: staff error " + e);
 		} finally {
@@ -230,8 +154,8 @@ public class UserService {
 	}
 	
 	
-	public boolean updateStaffMember(User user) {
-		System.out.println(user.getId()+" "+user.getUserName());
+	public boolean updateUser(User user) {
+		
 		boolean completed = false;
 		Connection connection = null;
 
@@ -239,19 +163,27 @@ public class UserService {
 
 		try {
 			connection = DbUtil.getConnection();
-			String sql = "UPDATE users SET user_name=?, password=?, role=? WHERE reg_no=?";
+			String sql = "UPDATE users SET user_name=?, password=?, name=?, gender=?, phone=?, "
+					+ "nic=?, email=?, address=? ,role=? WHERE user_id=?";
 
 			pstmt = connection.prepareStatement(sql);
 
 			pstmt.setString(1, user.getUserName());
 			pstmt.setString(2, user.getPassword());
-			pstmt.setString(3, user.getRole());
-			pstmt.setInt(4, user.getId());
-			System.out.println("pstmt fine");
+			pstmt.setString(3, user.getName());
+			pstmt.setString(4, user.getGender());
+			pstmt.setInt(5, user.getPhone());
+			pstmt.setInt(6, user.getNic());
+			pstmt.setString(7, user.getEmail());
+			pstmt.setString(8, user.getAddress());
+			pstmt.setString(9, user.getRole());
+			pstmt.setString(10, user.getUserId());
+		
+			
 			int affectedRows = pstmt.executeUpdate();
 
 			System.out.println(affectedRows + " row(s) affected !!");
-			System.out.println("Recode Insert successfully...");
+			System.out.println("User update successfully...");
 
 			completed = true;
 		} catch (Exception e) {
@@ -272,7 +204,8 @@ public class UserService {
 
 	}
 	
-	public boolean deleteUser(int userId) {
+	
+	public boolean deleteUser(String userId) {
 		boolean completed = false;
 		Connection connection = null;
 
@@ -280,15 +213,15 @@ public class UserService {
 
 		try {
 			connection = DbUtil.getConnection();
-			String sql = "DELETE FROM users WHERE reg_no=?";
+			String sql = "DELETE FROM users WHERE user_Id=?";
 
 			pstmt = connection.prepareStatement(sql);
-			pstmt.setInt(1, userId);
-			System.out.println("pstmt fine");
+			pstmt.setString(1, userId);
+			
 			int affectedRows = pstmt.executeUpdate();
 
 			System.out.println(affectedRows + " row(s) affected !!");
-			System.out.println("Recode Insert successfully...");
+			System.out.println("User delete successfully...");
 
 			completed = true;
 		} catch (Exception e) {
@@ -308,46 +241,9 @@ public class UserService {
 		return completed;
 	}
 	
-	public List<String> getCategorizedUsers(String role) {
-		List<String> resultList = new ArrayList<>();
-		Connection connection = null;
-
-		PreparedStatement pstmt = null;
-		ResultSet rs = null;
-		try {
-			connection = DbUtil.getConnection();
-			String sql = "SELECT user_name FROM users WHERE role=?";
-			pstmt = connection.prepareStatement(sql);
-			pstmt.setString(1, role);
-			rs = pstmt.executeQuery();
-			while (rs.next()) {
-				
-				resultList.add(rs.getString(1));
-			}
-		} catch (Exception e) {
-			System.out.println("Error: staff error " + e);
-		} finally {
-			try {
-				if (rs != null) {
-					rs.close();
-				}
-
-				if (pstmt != null) {
-					pstmt.close();
-				}
-
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-
-		}
-
-		return resultList;
-
-	}
 	
-	public int getUserId(String userName) {
+	
+	/*public int getUserId(String userName) {
 		int userId = 0;
 		Connection connection = null;
 
@@ -385,51 +281,9 @@ public class UserService {
 
 		return userId;
 		
-	}
+	}*/
 	
-	public List<User> getCustmorUsers() {
-		List<User> resultList = new ArrayList<>();
-		Connection connection = null;
-
-		PreparedStatement pstmt = null;
-		ResultSet rs = null;
-		try {
-			connection = DbUtil.getConnection();
-			String sql = "SELECT * FROM users WHERE role=?";
-			pstmt = connection.prepareStatement(sql);
-			pstmt.setString(1, "Customer");
-			rs = pstmt.executeQuery();
-			while (rs.next()) {
-				
-				User user = new User();
-				user.setId(rs.getInt(1));
-				user.setUserName(rs.getString(2));
-				user.setPassword(rs.getString(3));
-				user.setRole(rs.getString(4));
-				resultList.add(user);
-			}
-		} catch (Exception e) {
-			System.out.println("Error: staff error " + e);
-		} finally {
-			try {
-				if (rs != null) {
-					rs.close();
-				}
-
-				if (pstmt != null) {
-					pstmt.close();
-				}
-
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-
-		}
-
-		return resultList;
-
-	}
+	
 	
 	
 

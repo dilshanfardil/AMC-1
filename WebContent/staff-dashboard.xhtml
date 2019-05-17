@@ -8,14 +8,14 @@
 	<h:head>
 	</h:head>
 	<h:body>
-		<h:form>
-			<p:menubar>
-				<p:menuitem id="logout" value="Logout" icon="ui-icon-home"
-					ajax="false" action="#{loginBean.logout}" />
-			</p:menubar>
-		</h:form>
+
 		<h:form>
 			<p:layout style="min-width:1200px;min-height:600px;">
+				<p:layoutUnit position="north" resizable="true" size="60">
+					<h:form>
+						<p:commandButton value="Logout" action="#{loginBean.logout}" />
+					</h:form>
+				</p:layoutUnit>
 				<p:layoutUnit position="west" resizable="true" size="200">
 					<h:form>
 						<p:panelMenu>

@@ -9,14 +9,14 @@
 	<h:head>
 	</h:head>
 	<h:body>
-		<h:form>
-			<p:menubar>
-				<p:menuitem id="logout" value="Logout" icon="ui-icon-home"
-					ajax="false" action="#{loginBean.logout}" />
-			</p:menubar>
-		</h:form>
+
 		<h:form>
 			<p:layout style="min-width:1200px;min-height:600px;">
+				<p:layoutUnit position="north" resizable="true" size="60">
+					<h:form>
+						<p:commandButton value="Logout" action="#{loginBean.logout}" />
+					</h:form>
+				</p:layoutUnit>
 				<p:layoutUnit position="west" resizable="true" size="200">
 					<h:form>
 						<p:panelMenu>
@@ -37,71 +37,66 @@
 						</f:facet>
 
 						<p:tabView>
-							<p:ajax event="tabChange"
-								listener="#{appointmentBean.onTabChange}" update="userId,docId" />
-							<!-- p:ajax event="tabClose" listener="#{tabbedView.onTabClose}" /-->
+							<p:ajax event="tabChange" listener="#{staffBean.onTabChange}"
+								update="cusId,docId" />
+
 
 							<p:tab title="Customer Registration" id="customer">
 								<p:panelGrid columns="2" id="cusPanel" cellpadding="10">
-									<h:outputLabel value="User Name: " />
+									<h:outputLabel value="Customer ID : " />
+									<p:inputText id="userId" value="#{user.userId}" />
+									<h:outputLabel value="Cutomer UserName : " />
 									<p:inputText id="userName" value="#{user.userName}" />
-									<h:outputLabel value="Password: " />
+									<h:outputLabel value="Password : " />
 									<p:password id="password" value="#{user.password}" />
-									<p:outputLabel value="Role:" />
-									<p:selectOneMenu id="role" value="#{user.role}"
+									<h:outputLabel value="Customer Name : " />
+									<p:inputText id="name" value="#{user.name}" />
+									<p:outputLabel value="Gender :" />
+									<p:selectOneMenu id="gender" value="#{user.gender}"
 										style="width:125px">
-										<f:selectItem itemLabel="Customer" itemValue="Customer" />
+										<f:selectItem itemLabel="Male" itemValue="Male" />
+										<f:selectItem itemLabel="Female" itemValue="Female" />
 									</p:selectOneMenu>
-									<!-- h:outputLabel value="Date of Birth: " />
-						<p:calendar navigator="none" value="#{studentBean.student.dob}" />
-						<h:outputLabel value="NIC: " />
-						<p:inputText id="nic" value="#{studentBean.student.nic}" />
-						<h:outputLabel value="Email: " />
-						<p:inputText id="email" value="#{studentBean.student.email}" />
-						<h:outputLabel value="Phone No: " />
-						<p:inputText id="phone" value="#{studentBean.student.phoneNo}" />
-						<h:outputLabel value="Address: " />
-						<p:inputTextarea id="address" rows="4" cols="40"
-							value="#{studentBean.student.address}" /-->
+									<h:outputLabel value="Phone :" />
+									<p:inputText id="phone" value="#{user.phone}" />
+									<h:outputLabel value="NIC :" />
+									<p:inputText id="nic" value="#{user.nic}" />
+									<h:outputLabel value="Email :" />
+									<p:inputText id="email" value="#{user.email}" />
+									<h:outputLabel value="Address :" />
+									<p:inputText id="address" value="#{user.address}" />
+									<p:outputLabel value="Role :" />
+
 									<f:facet name="footer">
-										<p:commandButton value="Submit" icon="ui-icon-check"
-											actionListener="#{userBean.addUser(user)}" />
+										<p:commandButton value="Add" icon="ui-icon-check"
+											actionListener="#{customerBean.addCustomer(user)}" />
 									</f:facet>
 								</p:panelGrid>
 							</p:tab>
 							<p:tab title="Appoinment Addition" id="appointment"
 								closable="true">
 								<p:panelGrid columns="2" id="appPanel" cellpadding="10">
+
+									<p:outputLabel value="Appointment ID:" />
+									<p:inputText id="appointmentId"
+										value="#{appointment.appointmentId}" />
+
 									<h:outputLabel value="Customer Name: " />
-									<p:selectOneMenu id="userId"
-										value="#{appointment.customerName}" style="width:125px">
-										<f:selectItems value="#{appointmentBean.customers}" />
+									<p:selectOneMenu id="cusId" value="#{appointment.customerId}"
+										style="width:125px">
+										<f:selectItems value="#{staffBean.customerNames}" />
 									</p:selectOneMenu>
 
 									<h:outputLabel value="Doctor Name: " />
-									<p:selectOneMenu id="docId" value="#{appointment.doctorName}"
+									<p:selectOneMenu id="docId" value="#{appointment.doctorId}"
 										style="width:125px">
-										<f:selectItems value="#{appointmentBean.doctors}" />
+										<f:selectItems value="#{staffBean.doctorNames}" />
 									</p:selectOneMenu>
 
 									<p:outputLabel value="Date:" />
 									<p:calendar id="date" value="#{appointment.date}"
 										navigator="none" />
 
-									<p:outputLabel value="Charge:" />
-									<p:inputText id="charge" value="#{appointment.charge}" />
-
-									<!-- h:outputLabel value="Date of Birth: " />
-						<p:calendar navigator="none" value="#{studentBean.student.dob}" />
-						<h:outputLabel value="NIC: " />
-						<p:inputText id="nic" value="#{studentBean.student.nic}" />
-						<h:outputLabel value="Email: " />
-						<p:inputText id="email" value="#{studentBean.student.email}" />
-						<h:outputLabel value="Phone No: " />
-						<p:inputText id="phone" value="#{studentBean.student.phoneNo}" />
-						<h:outputLabel value="Address: " />
-						<p:inputTextarea id="address" rows="4" cols="40"
-							value="#{studentBean.student.address}" /-->
 									<f:facet name="footer">
 										<p:commandButton value="Add" icon="ui-icon-check"
 											actionListener="#{appointmentBean.addAppointment(appointment)}" />

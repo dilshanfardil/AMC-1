@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:h="http://java.sun.com/jsf/html"
@@ -5,6 +6,7 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:p="http://primefaces.org/ui">
 <f:view contentType="text/html">
+
 	<h:head>
 	</h:head>
 	<h:body>
@@ -34,12 +36,39 @@
 					</h:form>
 				</p:layoutUnit>
 				<p:layoutUnit position="center">
-					<h1>Welcome Doctor...!</h1>
+					<p:messages id="msg" showDetail="true" autoUpdate="false"
+						closable="true" />
+					<p:panelGrid columns="2" id="managerPanel">
+						<f:facet name="header">
+						Appointment Update
+						</f:facet>
+
+						<p:panelGrid columns="2" id="appPanel" cellpadding="10">
+
+							<h:outputLabel value="#{editAppointment.appointmentId}" />
+							<h:outputLabel value="#{editAppointment.customerId}" />
+							<h:outputLabel value="Medicine" />
+							<p:inputText id="medicine" value="#{editAppointment.medicine}" />
+							<h:outputLabel value="Charge : " />
+							<p:inputText id="charge" value="#{editAppointment.charge}" />
+							<h:outputLabel value="Feedback : " />
+							<p:inputText id="feedback" value="#{editAppointment.feedback}" />
+
+
+
+
+
+
+
+							<f:facet name="footer">
+								<p:commandButton value="Update"
+									actionListener="#{doctorBean.updateAppointment(editAppointment)}" />
+							</f:facet>
+						</p:panelGrid>
+					</p:panelGrid>
 				</p:layoutUnit>
 			</p:layout>
 		</h:form>
 	</h:body>
 </f:view>
 </html>
-
-

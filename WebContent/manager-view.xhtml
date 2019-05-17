@@ -12,14 +12,14 @@
 	<h:head>
 	</h:head>
 	<h:body>
-		<h:form>
-			<p:menubar>
-				<p:menuitem id="logout" value="Logout" icon="ui-icon-home"
-					ajax="false" action="#{loginBean.logout}" />
-			</p:menubar>
-		</h:form>
+
 		<h:form>
 			<p:layout style="min-width:1200px;min-height:600px;">
+				<p:layoutUnit position="north" resizable="true" size="60">
+					<h:form>
+						<p:commandButton value="Logout" action="#{loginBean.logout}" />
+					</h:form>
+				</p:layoutUnit>
 				<p:layoutUnit position="west" resizable="true" size="200">
 					<h:form>
 						<p:panelMenu>
@@ -38,11 +38,23 @@
 					<p:dataTable var="user" value="#{userBean.allUsers}">
 
 						<p:column headerText="User ID">
-							<h:outputText value="#{user.id}" />
+							<h:outputText value="#{user.userId}" />
 						</p:column>
 
 						<p:column headerText="User Name">
-							<h:outputText value="#{user.userName}" />
+							<h:outputText value="#{user.name}" />
+						</p:column>
+
+						<p:column headerText="Gender">
+							<h:outputText value="#{user.gender}" />
+						</p:column>
+
+						<p:column headerText="Phone">
+							<h:outputText value="#{user.phone}" />
+						</p:column>
+
+						<p:column headerText="Email">
+							<h:outputText value="#{user.email}" />
 						</p:column>
 
 						<p:column headerText="Role">
@@ -52,21 +64,17 @@
 
 
 						<p:column headerText="Actions">
-							<p:commandButton value="update" id="updateBtn"
-								action="#{userBean.loadUser(user.id)}"
+							<p:commandButton value="Update" id="updateBtn"
+								action="#{userBean.loadUser(user.userId)}"
 								style="margin-right:20px;" styleClass="ui-priority-primary" />
 
-							<p:commandButton value="delete" id="deleteBtn"
-								action="#{userBean.deleteUser(user.id)}"
+							<p:commandButton value="Delete" id="deleteBtn"
+								action="#{userBean.deleteUser(user.userId)}"
 								style="margin-right:20px;" styleClass="ui-priority-primary" />
 						</p:column>
 
-						<!-- p:column headerText="NIC">
-							<h:outputText value="#{stud.nic}" />
-						</p:column>
-						<p:column headerText="Phone #">
-							<h:outputText value="#{stud.phoneNo}" />
-						</p:column-->
+
+
 					</p:dataTable>
 				</p:layoutUnit>
 			</p:layout>

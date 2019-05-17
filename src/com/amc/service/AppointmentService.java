@@ -13,7 +13,7 @@ import com.amc.model.Appointment;
 import com.amc.util.DbUtil;
 
 public class AppointmentService {
-	
+
 	public boolean addAppointment(Appointment appointment) {
 		boolean completed = false;
 		Connection connection = null;
@@ -22,19 +22,20 @@ public class AppointmentService {
 
 		try {
 			connection = DbUtil.getConnection();
-			String sql = "INSERT INTO appointments(user_id, doc_id, app_date, duration_left, charge) VALUES (?,?,?,?,?)";
+			String sql = "INSERT INTO appointments(app_id, cus_id, doc_id, app_date, duration_left) VALUES (?,?,?,?,?)";
 
 			pstmt = connection.prepareStatement(sql);
 
-			pstmt.setInt(1,1);
-			pstmt.setInt(2,1);
-			pstmt.setDate(3,new java.sql.Date(appointment.getDate().getTime()));
-			pstmt.setInt(4, 1);
-			pstmt.setDouble(5, appointment.getCharge());
+			pstmt.setString(1, appointment.getAppointmentId());
+			pstmt.setString(2, appointment.getCustomerId());
+			pstmt.setString(3, appointment.getDoctorId());
+			pstmt.setDate(4, new java.sql.Date(appointment.getDate().getTime()));
+			pstmt.setInt(5, appointment.getDurationLeft());
+
 			int affectedRows = pstmt.executeUpdate();
 
 			System.out.println(affectedRows + " row(s) affected !!");
-			System.out.println("Recode Insert successfully...");
+			System.out.println("App add by staff successfully...");
 
 			completed = true;
 		} catch (Exception e) {
@@ -54,9 +55,9 @@ public class AppointmentService {
 		return completed;
 
 	}
-	
+
 	public List<Appointment> getAllAppointments() {
-		List<Appointment> staffList = new ArrayList<>();
+		List<Appointment> list = new ArrayList<>();
 		Connection connection = null;
 
 		PreparedStatement pstmt = null;
@@ -66,22 +67,24 @@ public class AppointmentService {
 			String sql = "SELECT * FROM appointments";
 
 			pstmt = connection.prepareStatement(sql);
-			
 
 			rs = pstmt.executeQuery();
 			while (rs.next()) {
 				Appointment appointment = new Appointment();
-				appointment.setAppointmentId(rs.getInt(1));
-				appointment.setCustomerName(String.valueOf(rs.getInt(2)));
-				appointment.setDoctorName(String.valueOf(rs.getInt(3)));
+				appointment.setAppointmentId(rs.getString(1));
+				appointment.setCustomerId(rs.getString(2));
+				appointment.setDoctorId(rs.getString(3));
 				appointment.setDate(rs.getDate(4));
 				appointment.setDurationLeft(rs.getInt(5));
-				appointment.setCharge(rs.getDouble(6));
-				
-				staffList.add(appointment);
+				appointment.setMedicine(rs.getString(6));
+				appointment.setFeedback(rs.getString(7));
+				appointment.setComment(rs.getString(8));
+				appointment.setCharge(rs.getDouble(9));
+
+				list.add(appointment);
 			}
 		} catch (Exception e) {
-			System.out.println("Error: staff error " + e);
+			System.out.println("Error: appointment error " + e);
 		} finally {
 			try {
 				if (rs != null) {
@@ -99,11 +102,11 @@ public class AppointmentService {
 
 		}
 
-		return staffList;
+		return list;
 
 	}
-	
-	public Appointment loadAppointment(int appointmentId) {
+
+	public Appointment loadAppointment(String appointmentId) {
 		Appointment appointment = new Appointment();
 		Connection connection = null;
 
@@ -114,21 +117,22 @@ public class AppointmentService {
 			String sql = "SELECT * FROM appointments WHERE app_id = ?";
 
 			pstmt = connection.prepareStatement(sql);
-			
-			pstmt.setInt(1, appointmentId);
+
+			pstmt.setString(1, appointmentId);
 
 			rs = pstmt.executeQuery();
-			while (rs.next()) {
-				
-				appointment.setAppointmentId(rs.getInt(1));
-				appointment.setCustomerName(String.valueOf(rs.getInt(2)));
-				appointment.setDoctorName(String.valueOf(rs.getInt(3)));
-				appointment.setDate(rs.getDate(4));
-				appointment.setDurationLeft(rs.getInt(5));
-				appointment.setCharge(rs.getDouble(6));
-				
-				
-			}
+			rs.next();
+
+			appointment.setAppointmentId(rs.getString(1));
+			appointment.setCustomerId(rs.getString(2));
+			appointment.setDoctorId(rs.getString(3));
+			appointment.setDate(rs.getDate(4));
+			appointment.setDurationLeft(rs.getInt(5));
+			appointment.setMedicine(rs.getString(6));
+			appointment.setFeedback(rs.getString(7));
+			appointment.setComment(rs.getString(8));
+			appointment.setCharge(rs.getDouble(9));
+
 		} catch (Exception e) {
 			System.out.println("Error: staff error " + e);
 		} finally {
@@ -151,7 +155,7 @@ public class AppointmentService {
 		return appointment;
 
 	}
-	
+
 	public boolean updateAppointment(Appointment appointment) {
 		boolean completed = false;
 		Connection connection = null;
@@ -160,20 +164,25 @@ public class AppointmentService {
 
 		try {
 			connection = DbUtil.getConnection();
-			String sql = "UPDATE appointments SET user_id=?, doc_id =?, app_date=?, duration_left=?, charge=? WHERE app_id=?";
+			String sql = "UPDATE appointments SET cus_id=?, doc_id =?, app_date=?, duration_left=?, medicine=?, feedback=?, comment=?, charge=? WHERE app_id=?";
 
 			pstmt = connection.prepareStatement(sql);
 
-			pstmt.setInt(1,2);
-			pstmt.setInt(2,2);
-			pstmt.setDate(3,new java.sql.Date(appointment.getDate().getTime()));
-			pstmt.setInt(4, 12);
-			pstmt.setDouble(5, appointment.getCharge());
-			pstmt.setInt(6, appointment.getAppointmentId());
+			pstmt.setString(1, appointment.getCustomerId());
+			pstmt.setString(2, appointment.getDoctorId());
+			pstmt.setDate(3, new java.sql.Date(appointment.getDate().getTime()));
+			pstmt.setInt(4, appointment.getDurationLeft());
+			pstmt.setString(5, appointment.getMedicine());
+			pstmt.setString(6, appointment.getFeedback());
+			pstmt.setString(7, appointment.getComment());
+			pstmt.setDouble(8, appointment.getCharge());
+
+			pstmt.setString(9, appointment.getAppointmentId());
+
 			int affectedRows = pstmt.executeUpdate();
 
 			System.out.println(affectedRows + " row(s) affected !!");
-			System.out.println("Recode Insert successfully...");
+			System.out.println("Apppointment update successfully...");
 
 			completed = true;
 		} catch (Exception e) {
@@ -193,8 +202,8 @@ public class AppointmentService {
 		return completed;
 
 	}
-	
-	public boolean deleteAppointment(int appId) {
+
+	public boolean deleteAppointment(String appoinmentId) {
 		boolean completed = false;
 		Connection connection = null;
 
@@ -205,12 +214,12 @@ public class AppointmentService {
 			String sql = "DELETE FROM appointments WHERE app_id=?";
 
 			pstmt = connection.prepareStatement(sql);
-			pstmt.setInt(1, appId);
-			System.out.println("pstmt fine");
+			pstmt.setString(1, appoinmentId);
+
 			int affectedRows = pstmt.executeUpdate();
 
 			System.out.println(affectedRows + " row(s) affected !!");
-			System.out.println("Recode Insert successfully...");
+			System.out.println("Apppointment delete successfully...");
 
 			completed = true;
 		} catch (Exception e) {
@@ -229,36 +238,38 @@ public class AppointmentService {
 
 		return completed;
 	}
-	
-	
-	public List<Appointment> loadAppointmentsByUserId(int userId, String column) {
-		List<Appointment> staffList = new ArrayList<>();
+
+	public List<Appointment> loadAppointmentsById(String id, String column) {
+		List<Appointment> list = new ArrayList<>();
 		Connection connection = null;
 
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		try {
 			connection = DbUtil.getConnection();
-			String sql = "SELECT * FROM appointments WHERE "+column+"=?";
+			String sql = "SELECT * FROM appointments WHERE " + column + "=?";
 
 			pstmt = connection.prepareStatement(sql);
-			
-			pstmt.setInt(1, userId);
+
+			pstmt.setString(1, id);
 
 			rs = pstmt.executeQuery();
 			while (rs.next()) {
 				Appointment appointment = new Appointment();
-				appointment.setAppointmentId(rs.getInt(1));
-				appointment.setCustomerName(String.valueOf(rs.getInt(2)));
-				appointment.setDoctorName(String.valueOf(rs.getInt(3)));
+				appointment.setAppointmentId(rs.getString(1));
+				appointment.setCustomerId(rs.getString(2));
+				appointment.setDoctorId(rs.getString(3));
 				appointment.setDate(rs.getDate(4));
 				appointment.setDurationLeft(rs.getInt(5));
-				appointment.setCharge(rs.getDouble(6));
-				
-				staffList.add(appointment);
+				appointment.setMedicine(rs.getString(6));
+				appointment.setFeedback(rs.getString(7));
+				appointment.setComment(rs.getString(8));
+				appointment.setCharge(rs.getDouble(9));
+
+				list.add(appointment);
 			}
 		} catch (Exception e) {
-			System.out.println("Error: staff error " + e);
+			System.out.println("Error: doctor error " + e);
 		} finally {
 			try {
 				if (rs != null) {
@@ -276,10 +287,8 @@ public class AppointmentService {
 
 		}
 
-		return staffList;
+		return list;
 
 	}
-	
-	
 
 }

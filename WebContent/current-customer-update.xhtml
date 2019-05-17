@@ -6,6 +6,7 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:p="http://primefaces.org/ui">
 <f:view contentType="text/html">
+	
 	<h:head>
 	</h:head>
 	<h:body>
@@ -14,16 +15,19 @@
 			<p:layout style="min-width:1200px;min-height:600px;">
 				<p:layoutUnit position="north" resizable="true" size="60">
 					<h:form>
-						<p:commandButton value="Logout" action="#{loginBean.logout}" />
+						<p:commandButton value="Edit" action="#{loginBean.loadUser(currentUserId)}" />
+						<p:commandButton style="right:-20px" value="Logout"
+							action="#{loginBean.logout}" />
 					</h:form>
 				</p:layoutUnit>
 				<p:layoutUnit position="west" resizable="true" size="200">
 					<h:form>
 						<p:panelMenu>
-							<p:submenu label="Manager">
-								<p:menuitem value="Registrations" url="/manager-register.xhtml" />
-								<p:menuitem value="User Management" url="/manager-view.xhtml" />
-								<p:menuitem value="Reports Section" url="#" />
+							<p:submenu label="Customer">
+								<p:menuitem value="My Profile"
+									url="/current-customer-update.xhtml" />
+								<p:menuitem value="Appointments" url="/customer-view.xhtml" />
+
 							</p:submenu>
 						</p:panelMenu>
 					</h:form>
@@ -33,40 +37,35 @@
 						closable="true" />
 					<p:panelGrid columns="2" id="managerPanel">
 						<f:facet name="header">
-						User Update
+						Customer Update
 						</f:facet>
 
 						<h:outputLabel value="User Name : " />
-						<p:inputText id="userName" value="#{editUser.userName}" />
+						<p:inputText id="userName"
+							value="#{editCurrentUser.userName}" />
 						<h:outputLabel value="Password : " />
-						<p:password id="password" value="#{editUser.password}" />
+						<p:password id="password"
+							value="#{editCurrentUser.password}" />
 						<h:outputLabel value="Name : " />
-						<p:inputText id="name" value="#{editUser.name}" />
+						<p:inputText id="name" value="#{editCurrentUser.name}" />
 						<p:outputLabel value="Gender :" />
-						<p:selectOneMenu id="gender" value="#{editUser.gender}"
-							style="width:125px">
+						<p:selectOneMenu id="gender"
+							value="#{editCurrentUser.gender}" style="width:125px">
 							<f:selectItem itemLabel="Male" itemValue="Male" />
 							<f:selectItem itemLabel="Female" itemValue="Female" />
 						</p:selectOneMenu>
 						<h:outputLabel value="Phone :" />
-						<p:inputText id="phone" value="#{editUser.phone}" />
+						<p:inputText id="phone" value="#{editCurrentUser.phone}" />
 						<h:outputLabel value="NIC :" />
-						<p:inputText id="nic" value="#{editUser.nic}" />
+						<p:inputText id="nic" value="#{editCurrentUser.nic}" />
 						<h:outputLabel value="Email :" />
-						<p:inputText id="email" value="#{editUser.email}" />
+						<p:inputText id="email" value="#{editCurrentUser.email}" />
 						<h:outputLabel value="Address :" />
-						<p:inputText id="address" value="#{editUser.address}" />
-						<p:outputLabel value="Role :" />
-						<p:selectOneMenu id="role" value="#{editUser.role}"
-							style="width:125px">
-							<f:selectItem itemLabel="Select One" itemValue="" />
-							<f:selectItem itemLabel="Manager" itemValue="Manager" />
-							<f:selectItem itemLabel="Counter Staff" itemValue="Counter Staff" />
-							<f:selectItem itemLabel="Doctor" itemValue="Doctor" />
-						</p:selectOneMenu>
+						<p:inputText id="address" value="#{editCurrentUser.address}" />
+
 						<f:facet name="footer">
 							<p:commandButton value="Update" icon="ui-icon-check"
-								actionListener="#{userBean.updateUser(editUser)}" />
+								actionListener="#{loginBean.updateUser(editCurrentUser)}" />
 						</f:facet>
 					</p:panelGrid>
 				</p:layoutUnit>

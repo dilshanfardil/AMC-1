@@ -18,10 +18,8 @@ import com.amc.service.UserService;
 @ViewScoped
 public class UserBean {
 
-	// private User user = new User();
-	private List<User> allUsers = new ArrayList<User>(0);
 	
-
+	private List<User> allUsers = new ArrayList<User>(0);
 	
 
 	public void addUser(User user) {
@@ -40,40 +38,25 @@ public class UserBean {
 	}
 
 	public void loadUsersList() {
-
 		UserService us = new UserService();
 		allUsers = us.getAllUsers();
-
 	}
 
-	public String loadUser(int userId) {
+	public String loadUser(String userId) {
 
 		User selectedUser = new UserService().loadUser(userId);
-		System.out.println(selectedUser.getId() + " " + selectedUser.getUserName());
+		
 		ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
 		Map<String, Object> requestMap = externalContext.getSessionMap();
 		requestMap.put("editUser", selectedUser);
-		System.out.println("updating user added.");
+		//System.out.println("updating user added.");
 		return "manager-update";
 	}
-
-	public String loadCustomer(int userId) {
-
-		User selectedUser = new UserService().loadUser(userId);
-		// System.out.println(selectedUser.getId() + " " + selectedUser.getUserName());
-		ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
-		Map<String, Object> requestMap = externalContext.getSessionMap();
-		requestMap.put("editUser", selectedUser);
-		System.out.println("updating user added.");
-		return "staff-customer-update";
-
-	}
-
+	
 	public String updateUser(User user) {
 
 		UserService us = new UserService();
-		if (us.updateStaffMember(user)) {
-			System.out.println("update done.");
+		if (us.updateUser(user)) {
 			return "manager-dashboard";
 		} else {
 			System.out.println("Error on update");
@@ -83,23 +66,7 @@ public class UserBean {
 
 	}
 	
-	
-	public String updateCustomer(User user) {
-
-		UserService us = new UserService();
-		if (us.updateStaffMember(user)) {
-			System.out.println("update done.");
-			return "staff-dashboard";
-		} else {
-			System.out.println("Error on update");
-			return "";
-
-		}
-
-	}
-	
-
-	public String deleteUser(int userId) {
+	public String deleteUser(String userId) {
 		UserService us = new UserService();
 		if (us.deleteUser(userId)) {
 			return "manager-dashboard";
@@ -110,16 +77,6 @@ public class UserBean {
 		}
 	}
 	
-	public String deleteCustomer(int userId) {
-		UserService us = new UserService();
-		if (us.deleteUser(userId)) {
-			return "staff-dashboard";
-		} else {
-			System.out.println("Error on delete");
-			return "";
-
-		}
-	}
 
 	public List<User> getallUsers() {
 		return allUsers;

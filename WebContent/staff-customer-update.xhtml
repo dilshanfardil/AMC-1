@@ -10,14 +10,14 @@
 	</h:head>
 
 	<h:body>
-		<h:form>
-			<p:menubar>
-				<p:menuitem id="logout" value="Logout" icon="ui-icon-home"
-					ajax="false" action="#{loginBean.logout}" />
-			</p:menubar>
-		</h:form>
+
 		<h:form>
 			<p:layout style="min-width:1200px;min-height:600px;">
+				<p:layoutUnit position="north" resizable="true" size="60">
+					<h:form>
+						<p:commandButton value="Logout" action="#{loginBean.logout}" />
+					</h:form>
+				</p:layoutUnit>
 				<p:layoutUnit position="west" resizable="true" size="200">
 					<h:form>
 						<p:panelMenu>
@@ -34,32 +34,32 @@
 						closable="true" />
 					<p:panelGrid columns="2" id="managerPanel">
 						<f:facet name="header">
-						User Update
+						Customer Update
 						</f:facet>
 
-						<h:outputLabel value="User Name: " />
+						<h:outputLabel value="User Name : " />
 						<p:inputText id="userName" value="#{editUser.userName}" />
-						<h:outputLabel value="Password: " />
+						<h:outputLabel value="Password : " />
 						<p:password id="password" value="#{editUser.password}" />
-						<p:outputLabel value="Basic:" />
-						<p:selectOneMenu id="role" value="#{editUser.role}"
+						<h:outputLabel value="Name : " />
+						<p:inputText id="name" value="#{editUser.name}" />
+						<p:outputLabel value="Gender :" />
+						<p:selectOneMenu id="gender" value="#{editUser.gender}"
 							style="width:125px">
-							<f:selectItem itemLabel="Customer" itemValue="Customer" />
+							<f:selectItem itemLabel="Male" itemValue="Male" />
+							<f:selectItem itemLabel="Female" itemValue="Female" />
 						</p:selectOneMenu>
-						<!-- h:outputLabel value="Date of Birth: " />
-						<p:calendar navigator="none" value="#{studentBean.student.dob}" />
-						<h:outputLabel value="NIC: " />
-						<p:inputText id="nic" value="#{studentBean.student.nic}" />
-						<h:outputLabel value="Email: " />
-						<p:inputText id="email" value="#{studentBean.student.email}" />
-						<h:outputLabel value="Phone No: " />
-						<p:inputText id="phone" value="#{studentBean.student.phoneNo}" />
-						<h:outputLabel value="Address: " />
-						<p:inputTextarea id="address" rows="4" cols="40"
-							value="#{studentBean.student.address}" /-->
+						<h:outputLabel value="Phone :" />
+						<p:inputText id="phone" value="#{editUser.phone}" />
+						<h:outputLabel value="NIC :" />
+						<p:inputText id="nic" value="#{editUser.nic}" />
+						<h:outputLabel value="Email :" />
+						<p:inputText id="email" value="#{editUser.email}" />
+						<h:outputLabel value="Address :" />
+						<p:inputText id="address" value="#{editUser.address}" />
 						<f:facet name="footer">
 							<p:commandButton value="Update" icon="ui-icon-check"
-								actionListener="#{userBean.updateCustomer(editUser)}" />
+								actionListener="#{staffBean.updateCustomer(editUser)}" />
 						</f:facet>
 					</p:panelGrid>
 				</p:layoutUnit>

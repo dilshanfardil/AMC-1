@@ -8,19 +8,19 @@
 <f:view contentType="text/html">
 	<f:metadata>
 		<f:event type="preRenderView"
-			listener="#{appointmentBean.loadAllAppointments()}" />
+			listener="#{staffBean.loadAllCustomers()}" />
 	</f:metadata>
 	<h:head>
 	</h:head>
 	<h:body>
-		<h:form>
-			<p:menubar>
-				<p:menuitem id="logout" value="Logout" icon="ui-icon-home"
-					ajax="false" action="#{loginBean.logout}" />
-			</p:menubar>
-		</h:form>
+
 		<h:form>
 			<p:layout style="min-width:1200px;min-height:600px;">
+				<p:layoutUnit position="north" resizable="true" size="60">
+					<h:form>
+						<p:commandButton value="Logout" action="#{loginBean.logout}" />
+					</h:form>
+				</p:layoutUnit>
 				<p:layoutUnit position="west" resizable="true" size="200">
 					<h:form>
 						<p:panelMenu>
@@ -42,25 +42,67 @@
 
 						<p:tabView>
 							<p:ajax event="tabChange"
-								listener="#{appointmentBean.onTabChangeOnView()}"
+								listener="#{staffBean.onTabChangeToView()}"
 								update="appointment, customer" />
-							<!-- p:ajax event="tabClose" listener="#{tabbedView.onTabClose}" /-->
+
+							<p:tab title="Customers" id="customers" closable="true">
+								<p:panelGrid columns="1" id="appPanel" cellpadding="10">
+
+									<p:dataTable var="user" id="customer"
+										value="#{staffBean.allCustomers}">
+
+										<p:column headerText="Customer ID">
+											<h:outputText value="#{user.userId}" />
+										</p:column>
+
+										<p:column headerText="Customer Name">
+											<h:outputText value="#{user.name}" />
+										</p:column>
+
+										<p:column headerText="Gender">
+											<h:outputText value="#{user.gender}" />
+										</p:column>
+
+										<p:column headerText="Phone">
+											<h:outputText value="#{user.phone}" />
+										</p:column>
+
+										<p:column headerText="Email">
+											<h:outputText value="#{user.email}" />
+										</p:column>
+
+
+
+										<p:column headerText="Actions">
+											<p:commandButton value="update" id="updateBtn"
+												action="#{staffBean.loadCustomer(user.userId)}"
+												style="margin-right:20px;" styleClass="ui-priority-primary" />
+
+											<p:commandButton value="delete" id="deleteBtn"
+												action="#{staffBean.deleteCustomer(user.userId)}"
+												style="margin-right:20px;" styleClass="ui-priority-primary" />
+										</p:column>
+
+									</p:dataTable>
+								</p:panelGrid>
+							</p:tab>
+
 
 							<p:tab title="Appointments" id="appointments">
 								<p:panelGrid columns="1" id="cusPanel" cellpadding="10">
 									<p:dataTable var="appointment" id="appointment"
-										value="#{appointmentBean.allAppointments}">
+										value="#{staffBean.allAppointments}">
 
 										<p:column headerText="Appointment ID">
 											<h:outputText value="#{appointment.appointmentId}" />
 										</p:column>
 
 										<p:column headerText="Doctor ID">
-											<h:outputText value="#{appointment.doctorName}" />
+											<h:outputText value="#{appointment.doctorId}" />
 										</p:column>
 
 										<p:column headerText="Customer ID">
-											<h:outputText value="#{appointment.customerName}" />
+											<h:outputText value="#{appointment.customerId}" />
 										</p:column>
 
 										<p:column headerText="Appointment Date">
@@ -71,68 +113,28 @@
 											<h:outputText value="#{appointment.durationLeft}" />
 										</p:column>
 
+										<p:column headerText="Medicine">
+											<h:outputText value="#{appointment.medicine}" />
+										</p:column>
+
 										<p:column headerText="Charge">
 											<h:outputText value="#{appointment.charge}" />
 										</p:column>
 
 										<p:column headerText="Actions">
 											<p:commandButton value="update" id="updateBtn"
-												action="#{appointmentBean.loadAppointment(appointment.appointmentId)}"
+												action="#{staffBean.loadAppointment(appointment.appointmentId)}"
 												style="margin-right:20px;" styleClass="ui-priority-primary" />
 
 											<p:commandButton value="delete" id="deleteBtn"
-												action="#{appointmentBean.deleteAppointment(appointment.appointmentId)}"
+												action="#{staffBean.deleteAppointment(appointment.appointmentId)}"
 												style="margin-right:20px;" styleClass="ui-priority-primary" />
 										</p:column>
 
-										<!-- p:column headerText="NIC">
-							<h:outputText value="#{stud.nic}" />
-						</p:column>
-						<p:column headerText="Phone #">
-							<h:outputText value="#{stud.phoneNo}" />
-						</p:column-->
 									</p:dataTable>
 								</p:panelGrid>
 							</p:tab>
-							<p:tab title="Customers" id="customers" closable="true">
-								<p:panelGrid columns="1" id="appPanel" cellpadding="10">
 
-									<p:dataTable var="user" id="customer"
-										value="#{appointmentBean.allCustomers}">
-
-										<p:column headerText="User ID">
-											<h:outputText value="#{user.id}" />
-										</p:column>
-
-										<p:column headerText="User Name">
-											<h:outputText value="#{user.userName}" />
-										</p:column>
-
-										<p:column headerText="Role">
-											<h:outputText value="#{user.role}" />
-										</p:column>
-
-
-
-										<p:column headerText="Actions">
-											<p:commandButton value="update" id="updateBtn"
-												action="#{userBean.loadCustomer(user.id)}"
-												style="margin-right:20px;" styleClass="ui-priority-primary" />
-
-											<p:commandButton value="delete" id="deleteBtn"
-												action="#{userBean.deleteCustomer(user.id)}"
-												style="margin-right:20px;" styleClass="ui-priority-primary" />
-										</p:column>
-
-										<!-- p:column headerText="NIC">
-							<h:outputText value="#{stud.nic}" />
-						</p:column>
-						<p:column headerText="Phone #">
-							<h:outputText value="#{stud.phoneNo}" />
-						</p:column-->
-									</p:dataTable>
-								</p:panelGrid>
-							</p:tab>
 
 						</p:tabView>
 					</p:panelGrid>
